@@ -1,0 +1,156 @@
+!
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+track 1 ip sla 1 reachability
+!
+ip tcp synwait-time 5
+!
+!
+crypto isakmp policy 1
+ encr aes 256
+ hash sha512
+ authentication pre-share
+ group 16
+ lifetime 3600
+crypto isakmp key 6 Password1 address 0.0.0.0
+!
+!
+crypto ipsec transform-set vpn esp-aes 256 esp-sha512-hmac
+ mode transport
+!
+!
+crypto ipsec profile vpn
+ set transform-set vpn
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ ip address 192.168.255.133 255.255.255.252
+ tunnel source 192.168.122.3
+ tunnel destination 192.168.122.4
+ tunnel protection ipsec profile vpn
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ ip address 192.168.122.3 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ ip address 192.168.0.9 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ ip address 192.168.0.13 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ negotiation auto
+!
+router ospf 1
+ network 192.168.0.8 0.0.0.3 area 0
+ network 192.168.0.12 0.0.0.3 area 0
+ network 192.168.255.132 0.0.0.3 area 1
+ default-information originate
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside source list 100 interface GigabitEthernet0/0 overload
+ip route 0.0.0.0 0.0.0.0 192.168.122.1 track 1
+!
+ip sla auto discovery
+ip sla 1
+ icmp-echo 192.168.122.1 source-interface GigabitEthernet0/0
+ timeout 30000
+ frequency 30
+ip sla schedule 1 life forever start-time now
+no cdp log mismatch duplex
+!
+!
+access-list 100 permit ip any any
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+ transport input all
+!
+!
+end

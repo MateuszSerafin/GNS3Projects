@@ -1,0 +1,150 @@
+!
+! Last configuration change at 20:51:08 UTC Tue Jan 30 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname Switch
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.0.10 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 192.168.0.6 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ no switchport
+ ip address 192.168.1.5 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ no switchport
+ ip address 192.168.1.13 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ no switchport
+ ip address 192.168.1.25 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ no switchport
+ ip address 192.168.1.29 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ no switchport
+ ip address 192.168.255.126 255.255.255.128
+ standby 1 ip 192.168.255.1
+ standby 1 preempt
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ media-type rj45
+ negotiation auto
+!
+router ospf 1
+ network 192.168.0.4 0.0.0.3 area 0
+ network 192.168.0.8 0.0.0.3 area 0
+ network 192.168.1.4 0.0.0.3 area 0
+ network 192.168.1.12 0.0.0.3 area 0
+ network 192.168.1.24 0.0.0.3 area 0
+ network 192.168.1.28 0.0.0.3 area 0
+ network 192.168.255.0 0.0.0.127 area 0
+ default-information originate
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+!
+end
