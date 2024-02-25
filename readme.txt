@@ -1,5 +1,3 @@
 This repo is for my GNS3 projects.
 
-Folder ending with _NETWORK as name suggest is a network topology that i created/used.
-I will reuse VM's between networks and keep track of what i did therefore a folder ending with _VM is a folder containg some information what this VM does. 
-Also there is folder resources which are mostly for me to remind my self of how i did something in future in case i need it. 
+I changed how this repo should work. It will have just logs of labs i did so i can recall later what i did. Also i will mess around with networks it will be there. Previous version of this repo was too messy
