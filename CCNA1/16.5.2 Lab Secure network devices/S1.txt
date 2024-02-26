@@ -1,0 +1,207 @@
+Building configuration...
+Compressed configuration from 4220 bytes to 2058 bytes[OK]
+S1#
+S1#
+*Feb 26 20:56:33.753: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
+*Feb 26 20:56:34.399: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+S1#
+S1#
+S1#show run
+Building configuration...
+
+Current configuration : 4220 bytes
+!
+! Last configuration change at 20:56:12 UTC Mon Feb 26 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$s3Bh$3h2rXDEqBxCrbT1kKkELC0
+!
+username SSHadmin secret 5 $1$P1z2$1sOvrWAV0KKfm6YAMiWPs0
+no aaa new-model
+!
+!
+!
+!
+!
+no ip routing
+!
+!
+!
+no ip domain-lookup
+ip domain-name ccna-lab.com
+no ip cef
+login block-for 120 attempts 3 within 60
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface Vlan1
+ ip address 192.168.1.11 255.255.255.0
+!
+ip default-gateway 192.168.1.1
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ exec-timeout 360 0
+ password 7 041F080F1C22430F483A2A3958
+ login
+line aux 0
+line vty 0 4
+ exec-timeout 360 0
+ password 7 1341141B180F0B6B6A121C0A7F
+ login
+ transport input ssh
+line vty 5 15
+ exec-timeout 360 0
+ password 7 1341141B180F0B6B6A121C0A7F
+ login
+ transport input ssh
+!
+!
+end
