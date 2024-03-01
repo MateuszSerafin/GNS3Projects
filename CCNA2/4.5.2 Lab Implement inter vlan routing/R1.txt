@@ -1,19 +1,21 @@
 Building configuration...
 
-Current configuration : 1369 bytes
+Current configuration : 1695 bytes
 !
 upgrade fpd auto
 version 15.3
 service timestamps debug datetime msec
 service timestamps log datetime msec
-no service password-encryption
+service password-encryption
 !
 hostname R1
 !
 boot-start-marker
 boot-end-marker
 !
+aqm-register-fnf
 !
+enable secret 5 $1$rPku$4DdYGwYkw6OCMbIer7.rD0
 !
 no aaa new-model
 no ip icmp rate-limit unreachable
@@ -64,18 +66,20 @@ interface GigabitEthernet0/0
  media-type gbic
  negotiation auto
 !
-interface GigabitEthernet0/0.3
- encapsulation dot1Q 3
- ip address 192.168.3.1 255.255.255.0
+interface GigabitEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
 !
-interface GigabitEthernet0/0.4
- encapsulation dot1Q 4
- ip address 192.168.4.1 255.255.255.0
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
 !
-interface GigabitEthernet0/0.8
- encapsulation dot1Q 8 native
-
-
+interface GigabitEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+!
+interface GigabitEthernet0/0.1000
+ encapsulation dot1Q 1000 native
 !
 ip forward-protocol nd
 no ip http server
@@ -102,11 +106,14 @@ mgcp profile default
 gatekeeper
  shutdown
 !
+banner motd ^CAccess prohibited^C
 !
 line con 0
  exec-timeout 0 0
  privilege level 15
+ password 7 00071A150754
  logging synchronous
+ login
  stopbits 1
 line aux 0
  exec-timeout 0 0
@@ -114,6 +121,11 @@ line aux 0
  logging synchronous
  stopbits 1
 line vty 0 4
+ password 7 00071A150754
+ login
+ transport input all
+line vty 5 15
+ password 7 00071A150754
  login
  transport input all
 !
