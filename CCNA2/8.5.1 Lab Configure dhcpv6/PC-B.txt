@@ -1,0 +1,1 @@
+gns3 vpc didn't support stateful ipv6. Needed to run vm with arch linux it gets it's ipv6 according to document.

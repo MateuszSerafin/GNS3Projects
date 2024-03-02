@@ -1,0 +1,153 @@
+Building configuration...
+
+Current configuration : 2482 bytes
+!
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+enable secret 5 $1$M/Ct$ns.PW10/ZqhTODYnH/aDT.
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ccna-lab.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username SSHadmin secret 5 $1$JfTh$acYApUODjfvBCFhUgRiUq0
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 172.16.1.1 255.255.255.0
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+!
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 10.20.0.1 255.255.255.0
+ ip access-group 140 out
+!
+interface GigabitEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 10.30.0.1 255.255.255.0
+!
+interface GigabitEthernet0/0.40
+ encapsulation dot1Q 40
+ ip address 10.40.0.1 255.255.255.0
+ ip access-group 140 in
+!
+interface GigabitEthernet0/0.1000
+ encapsulation dot1Q 1000 native
+!
+ip forward-protocol nd
+no ip http server
+ip http authentication local
+ip http secure-server
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+access-list 130 deny   icmp 10.30.0.0 0.0.0.255 10.40.0.0 0.0.0.255
+access-list 130 permit ip any any
+access-list 140 deny   tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 22
+access-list 140 deny   tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 443
+access-list 140 deny   tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq www
+access-list 140 deny   icmp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255
+access-list 140 deny   icmp 10.40.0.0 0.0.0.255 10.30.0.0 0.0.0.255
+access-list 140 permit ip any any
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ password 7 030752180500
+ logging synchronous
+ login
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ password 7 1511021F0725
+ login local
+ transport input all
+line vty 5
+ password 7 1511021F0725
+ login local
+ transport input all
+line vty 6 15
+ password 7 045802150C2E
+ login
+ transport input all
+!
+!
+end

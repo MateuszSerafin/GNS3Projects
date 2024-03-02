@@ -1,0 +1,13 @@
+#connect nat for downloading packages
+pacman -Sy
+service start tftpd
+
+#systemd ip set
+[Match]
+Name=ens3
+
+[Network]
+Address=192.168.1.3/24
+Gateway=192.168.1.1
+
+#it does copying only when file exists in /srv/tftp/ not sure why. Probably needs other version of tftpd in order to make it work. Understand concept of it. When i will need to work i will check it then. Maybe arch tftp is funky.

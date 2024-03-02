@@ -1,0 +1,129 @@
+Building configuration...
+
+Current configuration : 1617 bytes
+!
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+enable secret 5 $1$.9A5$TN.SQFxFLo8cJRRRfLtCC/
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.1.1 255.255.255.0
+ ip ospf network point-to-point
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ ip address 10.53.0.2 255.255.255.0
+ ip ospf hello-interval 30
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+!
+router ospf 56
+ router-id 2.2.2.2
+ passive-interface Loopback1
+ network 10.53.0.2 0.0.0.0 area 0
+ network 192.168.1.1 0.0.0.0 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ password 7 02050D480809
+ logging synchronous
+ login
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ password 7 070C285F4D06
+ login
+ transport input all
+line vty 5 15
+ password 7 070C285F4D06
+ login
+ transport input all
+!
+!
+end
