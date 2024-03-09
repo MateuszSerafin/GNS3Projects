@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7123 bytes
+Current configuration : 7504 bytes
 !
-! Last configuration change at 21:03:29 UTC Fri Mar 8 2024
+! Last configuration change at 22:43:47 UTC Sat Mar 9 2024
 !
 version 15.2
 service timestamps debug datetime msec
@@ -52,6 +52,16 @@ ip dhcp excluded-address 192.168.2.190
 ip dhcp excluded-address 192.168.2.193
 ip dhcp excluded-address 192.168.2.194
 ip dhcp excluded-address 192.168.2.222
+ip dhcp excluded-address 192.168.1.3
+ip dhcp excluded-address 192.168.1.19
+ip dhcp excluded-address 192.168.1.35
+ip dhcp excluded-address 192.168.1.51
+ip dhcp excluded-address 192.168.1.67
+ip dhcp excluded-address 192.168.1.83
+ip dhcp excluded-address 192.168.2.3
+ip dhcp excluded-address 192.168.2.131
+ip dhcp excluded-address 192.168.2.132
+ip dhcp excluded-address 192.168.2.195
 !
 ip dhcp pool vlan10
  network 192.168.1.0 255.255.255.240

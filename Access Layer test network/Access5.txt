@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 5506 bytes
+Current configuration : 5243 bytes
 !
-! Last configuration change at 22:43:36 UTC Sat Mar 9 2024
+! Last configuration change at 22:43:39 UTC Sat Mar 9 2024
 !
 version 15.2
 service timestamps debug datetime msec
@@ -10,13 +10,13 @@ service timestamps log datetime msec
 service password-encryption
 service compress-config
 !
-hostname Distribution5
+hostname Access5
 !
 boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$IwCc$3NTz6n1peuifWxWcOebDq.
+enable secret 5 $1$gISD$woK1bDD8R00fRYcb1BFtb0
 !
 no aaa new-model
 !
@@ -24,11 +24,16 @@ no aaa new-model
 !
 !
 !
+no ip routing
+ip arp inspection vlan 10,20
+ip arp inspection validate src-mac dst-mac ip
 !
 !
 !
+ip dhcp snooping vlan 10,20
+ip dhcp snooping
 no ip domain-lookup
-ip cef
+no ip cef
 no ipv6 cef
 !
 !
@@ -51,63 +56,66 @@ vlan internal allocation policy ascending
 !
 !
 !
-interface Loopback1
- ip address 192.168.254.9 255.255.255.255
-!
-interface Port-channel1
- switchport trunk allowed vlan 10,20,30,999
+interface GigabitEthernet0/0
+ switchport trunk allowed vlan 10,20,999
  switchport trunk encapsulation dot1q
  switchport mode trunk
- switchport nonegotiate
-!
-interface GigabitEthernet0/0
- no switchport
- ip address 192.168.255.74 255.255.255.252
+ ip arp inspection trust
+ media-type rj45
  negotiation auto
+ ip dhcp snooping trust
 !
 interface GigabitEthernet0/1
- no switchport
- ip address 192.168.255.78 255.255.255.252
+ switchport trunk allowed vlan 10,20,999
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ip arp inspection trust
+ media-type rj45
  negotiation auto
+ ip dhcp snooping trust
 !
 interface GigabitEthernet0/2
- switchport trunk allowed vlan 10,20,30,999
- switchport trunk encapsulation dot1q
- switchport mode trunk
- switchport nonegotiate
- media-type rj45
- negotiation auto
- channel-group 1 mode on
-!
-interface GigabitEthernet0/3
- switchport trunk allowed vlan 10,20,30,999
- switchport trunk encapsulation dot1q
- switchport mode trunk
- switchport nonegotiate
- media-type rj45
- negotiation auto
- channel-group 1 mode on
-!
-interface GigabitEthernet1/0
- switchport trunk allowed vlan 10,20,30,999
- switchport trunk encapsulation dot1q
- switchport mode trunk
- switchport nonegotiate
- media-type rj45
- negotiation auto
-!
-interface GigabitEthernet1/1
- switchport trunk allowed vlan 10,20,30,999
- switchport trunk encapsulation dot1q
- switchport mode trunk
- switchport nonegotiate
- media-type rj45
- negotiation auto
-!
-interface GigabitEthernet1/2
  shutdown
  media-type rj45
  negotiation auto
+!
+interface GigabitEthernet0/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ switchport access vlan 10
+ switchport mode access
+ ip device tracking maximum 1
+ media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 3
+!
+interface GigabitEthernet1/1
+ switchport access vlan 10
+ switchport mode access
+ ip device tracking maximum 1
+ media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 3
+!
+interface GigabitEthernet1/2
+ switchport access vlan 20
+ switchport mode access
+ ip device tracking maximum 1
+ media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 3
 !
 interface GigabitEthernet1/3
  shutdown
@@ -155,37 +163,20 @@ interface GigabitEthernet3/3
  negotiation auto
 !
 interface Vlan10
- ip address 192.168.2.1 255.255.255.128
- standby 1 ip 192.168.2.126
- standby 1 priority 110
- standby 1 preempt
+ ip address 192.168.2.3 255.255.255.128
+ ip helper-address 192.168.254.3
+ ip helper-address 192.168.254.4
 !
 interface Vlan20
- ip address 192.168.2.129 255.255.255.192
- standby 1 ip 192.168.2.190
-!
-interface Vlan30
- ip address 192.168.2.193 255.255.255.224
- standby 1 ip 192.168.2.222
+ ip address 192.168.2.131 255.255.255.192
+ ip helper-address 192.168.254.3
+ ip helper-address 192.168.254.4
 !
 interface Vlan999
- ip address 192.168.2.225 255.255.255.248
- standby 1 ip 192.168.2.230
+ ip address 192.168.2.227 255.255.255.248
+ no ip route-cache
 !
-router ospf 1
- area 1 range 192.168.2.0 255.255.255.0
- passive-interface Vlan10
- passive-interface Vlan20
- passive-interface Vlan30
- passive-interface Vlan999
- network 192.168.2.1 0.0.0.0 area 1
- network 192.168.2.129 0.0.0.0 area 1
- network 192.168.2.193 0.0.0.0 area 1
- network 192.168.2.225 0.0.0.0 area 1
- network 192.168.254.9 0.0.0.0 area 0
- network 192.168.255.74 0.0.0.0 area 0
- network 192.168.255.78 0.0.0.0 area 0
-!
+ip default-gateway 192.168.2.230
 ip forward-protocol nd
 !
 no ip http server
@@ -228,14 +219,14 @@ banner login ^C
 banner motd ^CAccess prohibited^C
 !
 line con 0
- password 7 0822455D0A16
+ password 7 05080F1C2243
  login
 line aux 0
 line vty 0 4
- password 7 1511021F0725
+ password 7 14141B180F0B
  login
 line vty 5 15
- password 7 1511021F0725
+ password 7 104D000A0618
  login
 !
 !

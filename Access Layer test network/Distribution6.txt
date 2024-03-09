@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 5741 bytes
+Current configuration : 5537 bytes
 !
-! Last configuration change at 21:03:33 UTC Fri Mar 8 2024
+! Last configuration change at 22:57:29 UTC Sat Mar 9 2024
 !
 version 15.2
 service timestamps debug datetime msec
@@ -156,20 +156,14 @@ interface GigabitEthernet3/3
 !
 interface Vlan10
  ip address 192.168.2.2 255.255.255.128
- ip helper-address 192.168.254.3
- ip helper-address 192.168.254.4
  standby 1 ip 192.168.2.126
 !
 interface Vlan20
  ip address 192.168.2.130 255.255.255.192
- ip helper-address 192.168.254.3
- ip helper-address 192.168.254.4
  standby 1 ip 192.168.2.190
 !
 interface Vlan30
  ip address 192.168.2.194 255.255.255.224
- ip helper-address 192.168.254.3
- ip helper-address 192.168.254.4
  standby 1 ip 192.168.2.222
  standby 1 priority 110
  standby 1 preempt
