@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7504 bytes
+Current configuration : 7575 bytes
 !
-! Last configuration change at 22:43:47 UTC Sat Mar 9 2024
+! Last configuration change at 18:42:53 UTC Sun Mar 10 2024
 !
 version 15.2
 service timestamps debug datetime msec
@@ -243,12 +243,14 @@ router ospf 1
  network 192.168.255.57 0.0.0.0 area 0
  network 192.168.255.73 0.0.0.0 area 0
  network 192.168.255.81 0.0.0.0 area 0
+ default-information originate
 !
 ip forward-protocol nd
 !
 no ip http server
 no ip http secure-server
 !
+ip route 0.0.0.0 0.0.0.0 192.168.254.1
 !
 !
 !

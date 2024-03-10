@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 5293 bytes
+Current configuration : 6746 bytes
 !
-! Last configuration change at 22:43:42 UTC Sat Mar 9 2024
+! Last configuration change at 17:55:14 UTC Sun Mar 10 2024
 !
 version 15.2
 service timestamps debug datetime msec
@@ -18,7 +18,22 @@ boot-end-marker
 !
 enable secret 5 $1$WXDB$sd0M3unjPWhPhy3S2pyHV/
 !
-no aaa new-model
+aaa new-model
+!
+!
+aaa group server radius dot1xauth
+ server name radiusdot1xDC0
+ server name radiusdot1xDC1
+!
+aaa authentication dot1x default group dot1xauth
+aaa authorization network default group dot1xauth
+!
+!
+!
+!
+!
+!
+aaa session-id common
 !
 !
 !
@@ -37,12 +52,28 @@ no ip cef
 no ipv6 cef
 !
 !
+dot1x system-auth-control
+service-template webauth-global-inactive
+ inactivity-timer 3600
+service-template DEFAULT_LINKSEC_POLICY_MUST_SECURE
+ linksec policy must-secure
+service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE
+ linksec policy should-secure
+service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+ voice vlan
 !
 spanning-tree mode pvst
 spanning-tree extend system-id
 !
+!
 vlan internal allocation policy ascending
 !
+!
+!
+policy-map type control subscriber dot1sub
+ event session-started match-all
+  10 class always do-until-failure
+   10 authenticate using dot1x priority 10
 !
 !
 !
@@ -92,8 +123,13 @@ interface GigabitEthernet1/0
  ip device tracking maximum 1
  media-type rj45
  negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ service-policy type control subscriber dot1sub
  ip verify source port-security
  ip dhcp snooping limit rate 3
 !
@@ -103,8 +139,13 @@ interface GigabitEthernet1/1
  ip device tracking maximum 1
  media-type rj45
  negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ service-policy type control subscriber dot1sub
  ip verify source port-security
  ip dhcp snooping limit rate 3
 !
@@ -114,8 +155,13 @@ interface GigabitEthernet1/2
  ip device tracking maximum 1
  media-type rj45
  negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
  spanning-tree portfast edge
  spanning-tree bpduguard enable
+ service-policy type control subscriber dot1sub
  ip verify source port-security
  ip dhcp snooping limit rate 3
 !
@@ -186,7 +232,18 @@ no ip http secure-server
 !
 !
 !
+ip radius source-interface Vlan999
 !
+!
+!
+!
+radius server radiusdot1xDC0
+ address ipv4 192.168.253.2 auth-port 1645 acct-port 1646
+ key 7 052A050C245F5D5F
+!
+radius server radiusdot1xDC1
+ address ipv4 192.168.253.3 auth-port 1645 acct-port 1646
+ key 7 022707580E151C77
 !
 !
 control-plane
@@ -222,14 +279,11 @@ banner motd ^CAccess prohibited^C
 !
 line con 0
  password 7 060506324F41
- login
 line aux 0
 line vty 0 4
  password 7 01100F175804
- login
 line vty 5 15
  password 7 060506324F41
- login
 !
 !
 end
