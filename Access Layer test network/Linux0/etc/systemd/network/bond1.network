@@ -1,0 +1,8 @@
+[Match]
+Name=bond1
+
+[Network]
+BindCarrier=ens3 ens4
+Address=192.168.253.10/30
+Gateway=192.168.253.9
+DNS=192.168.253.10 192.168.253.2 192.168.253.6
