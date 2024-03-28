@@ -1,0 +1,2 @@
+The idea for personal pc's is that they can be taken out therefore need more security with password at boot for example.
+The policy is blocking just tpm it requires other features to work
