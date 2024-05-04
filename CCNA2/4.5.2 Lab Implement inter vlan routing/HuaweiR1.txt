@@ -1,0 +1,118 @@
+[V300R019C00SPC300]
+#
+ sysname R1
+ header login information "Access prohibited"
+#
+stp disable
+#
+authentication-profile name default_authen_profile
+authentication-profile name dot1x_authen_profile
+authentication-profile name dot1xmac_authen_profile
+authentication-profile name mac_authen_profile
+authentication-profile name multi_authen_profile
+authentication-profile name portal_authen_profile
+#
+dhcp enable
+#
+radius-server template default
+#
+pki realm default
+#
+ssl policy default_policy type server
+ pki-realm default
+ version tls1.2
+ ciphersuite rsa_aes_128_cbc_sha rsa_aes_128_sha256 rsa_aes_256_sha256 ecdhe_rsa_aes128_gcm_sha256 ecdhe_rsa_aes256_gcm_sha384
+#
+ike proposal default
+ encryption-algorithm aes-256 aes-192 aes-128
+ dh group14
+ authentication-algorithm sha2-512 sha2-384 sha2-256
+ authentication-method pre-share
+ integrity-algorithm hmac-sha2-256
+ prf hmac-sha2-256
+#
+free-rule-template name default_free_rule
+#
+portal-access-profile name portal_access_profile
+#
+aaa
+ authentication-scheme default
+ authentication-scheme radius
+  authentication-mode radius
+ authorization-scheme default
+ accounting-scheme default
+ local-aaa-user password policy administrator
+ domain default
+  authentication-scheme default
+ domain default_admin
+  authentication-scheme default
+ local-user admin password irreversible-cipher $1a$G0TI7jE;AW$d`:<5U|;wN{nmUC;\M*3t}93+^O=H=c:#9Rhw2Y1$
+ local-user admin privilege level 15
+ local-user admin service-type terminal http
+#
+firewall zone Local
+#
+interface GigabitEthernet0/0/0
+#
+interface GigabitEthernet0/0/0.10
+ dot1q termination vid 10
+ ip address 192.168.10.1 255.255.255.0
+#
+interface GigabitEthernet0/0/0.20
+ dot1q termination vid 20
+ ip address 192.168.20.1 255.255.255.0
+#
+interface GigabitEthernet0/0/0.30
+ dot1q termination vid 30
+ ip address 192.168.30.1 255.255.255.0
+#
+interface GigabitEthernet0/0/0.1000
+ dot1q termination vid 1000
+#
+interface GigabitEthernet0/0/1
+#
+interface GigabitEthernet0/0/2
+#
+interface GigabitEthernet0/0/3
+#
+interface GigabitEthernet0/0/4
+#
+interface GigabitEthernet0/0/5
+#
+interface GigabitEthernet0/0/6
+ description VirtualPort
+#
+interface NULL0
+#
+ snmp-agent local-engineid 800007DB03E0FC000A0B0C
+ snmp-agent trap enable
+#
+ ssh server permit interface GigabitEthernet0/0/0
+#
+ http secure-server ssl-policy default_policy
+ http secure-server enable
+ http server permit interface GigabitEthernet0/0/0
+#
+fib regularly-refresh disable
+#
+user-interface con 0
+ authentication-mode aaa
+user-interface vty 0
+ authentication-mode aaa
+ user privilege level 15
+user-interface vty 1 4
+#
+dot1x-access-profile name dot1x_access_profile
+#
+mac-access-profile name mac_access_profile
+#
+ops
+#
+autostart
+#
+secelog
+#
+ ms-channel
+
+#
+return
