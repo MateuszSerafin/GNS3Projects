@@ -1,0 +1,139 @@
+Building configuration...
+
+Current configuration : 1988 bytes
+!
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+security passwords min-length 12
+enable secret 5 $1$6QrH$6mO2.qPnV2XlGndUEGymE/
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ccna-lab.com
+ip cef
+login block-for 2 attempts 3 within 60
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username SSHadmin secret 5 $1$xHA.$.nPDFO/Qk402nK5f2tN9j/
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.0.0.1 255.255.255.0
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD:2::1/64
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ ip address 192.168.0.1 255.255.255.0
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD::1/64
+!
+interface GigabitEthernet1/0
+ ip address 192.168.1.1 255.255.255.0
+ negotiation auto
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD:1::1/64
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ exec-timeout 240 0
+ privilege level 15
+ password 7 0040100F175804474E02636043
+ logging synchronous
+ login
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ exec-timeout 240 0
+ password 7 08654F471A1A0A56533D383D60
+ login local
+ transport input ssh
+line vty 5 15
+ exec-timeout 240 0
+ password 7 08654F471A1A0A56533D383D60
+ login local
+ transport input ssh
+!
+!
+end

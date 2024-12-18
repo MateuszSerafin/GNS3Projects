@@ -1,0 +1,270 @@
+Building configuration...
+
+Current configuration : 6041 bytes
+!
+! Last configuration change at 18:45:33 UTC Sun Mar 10 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname Distribution4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$8C0B$zXOqt4/T7c5lwY1ve2wFm/
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+ --More--
+*Mar 10 22:31:10.306: %HSRP-5-STATECHANGE: Vlan20 Grp 1 state Standby -> Active
+*Mar 10 22:31:11.235: %HSRP-5-STATECHANGE: Vlan998 Grp 1 state Standby!        e
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.254.8 255.255.255.255
+!
+interface Port-channel1
+ no switchport
+ ip address 192.168.255.70 255.255.255.252
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.255.66 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 192.168.255.58 255.255.255.252
+ ip ospf cost 3
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 1 mode on
+!
+interface GigabitEthernet0/3
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0
+ switchport trunk allowed vlan 10,20,30,40,50,60,998,999
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ switchport trunk allowed vlan 10,20,30,40,50,60,998,999
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface Gi
+*Mar 10 22:31:11.848: %HSRP-5-STATECHANGE: Vlan10 Grp 1 state Standby -> Active
+*Mar 10 22:31:12.613: %HSRP-5-STATECHANGE: Vlan30 Grp 1 state Standby -> ActivegabitEthernet2/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface Vlan10
+ ip address 192.168.1.2 255.255.255.240
+ standby 1 ip 192.168.1.14
+!
+interface Vlan20
+ ip address 192.168.1.18 255.255.255.240
+ standby 1 ip 192.168.1.30
+!
+interface Vlan30
+ ip address 192.168.1.34 255.255.255.240
+ standby 1 ip 192.168.1.46
+!
+interface Vlan40
+ ip address 192.168.1.50 255.255.255.240
+ standby 1 ip 192.168.1.62
+ standby 1 priority 110
+ standby 1 preempt
+!
+interface Vlan50
+ ip address 192.168.1.66 255.255.255.240
+ standby 1 ip 192.168.1.78
+ standby 1 priority 110
+ standby 1 preempt
+!
+interface Vlan60
+ ip address 192.168.1.82 255.255.255.240
+ standby 1 ip 192.168.1.94
+ standby 1 priority 110
+ standby 1 preempt
+!
+interface Vlan998
+ ip address 192.168.1.243 255.255.255.248
+ standby 1 ip 192.168.1.246
+!
+interface Vlan999
+ ip address 192.168.1.250 255.255.255.248
+ standby 1 ip 192.168.1.254
+ standby 1 priority 110
+ standby 1 preempt
+!
+router ospf 1
+ area 1 range 192.168.1.0 255.255.255.0
+ passive-interface Loopback1
+ passive-interface Vlan10
+ passive-interface Vlan20
+ passive-interface Vlan30
+ passive-interface Vlan40
+ passive-interface Vlan50
+ passive-interface Vlan60
+ passive-interface Vlan998
+ passive-interface Vlan999
+ network 192.168.1.2 0.0.0.0 area 1
+ network 192.168.1.18 0.0.0.0 area 1
+ network 192.168.1.34 0.0.0.0 area 1
+ network 192.168.1.50 0.0.0.0 area 1
+ network 192.168.1.66 0.0.0.0 area 1
+ network 192.168.1.82 0.0.0.0 area 1
+ network 192.168.1.243 0.0.0.0 area 1
+ network 192.168.1.251 0.0.0.0 area 1
+ network 192.168.254.8 0.0.0.0 area 0
+ network 192.168.255.58 0.0.0.0 area 0
+ network 192.168.255.66 0.0.0.0 area 0
+ network 192.168.255.70 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ password 7 02050D480809
+ login
+line aux 0
+line vty 0 4
+ password 7 02050D480809
+ login
+line vty 5 15
+ password 7 121A0C041104
+ login
+!
+!

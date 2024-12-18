@@ -1,0 +1,295 @@
+Building configuration...
+
+Current configuration : 6893 bytes
+!
+! Last configuration change at 17:52:48 UTC Sun Mar 10 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname Access4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$WIBr$L/SzXC35NWEpiFMz0WO8p0
+!
+aaa new-model
+!
+!
+aaa group server radius dot1xauth
+ server name radiusdot1xDC0
+ server name radiusdot1xDC1
+!
+aaa authentication dot1x default group dot1xauth
+aaa authorization network default group dot1xauth
+!
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+!
+!
+no ip routing
+ip arp inspection vlan 40,50,60
+ip arp inspection validate src-mac dst-mac ip
+!
+!
+!
+ip dhcp snooping vlan 30,40,60
+ip dhcp snooping
+no ip domain-lookup
+no ip cef
+no ipv6 cef
+!
+!
+dot1x system-auth-control
+service-template webauth-global-inactive
+ inactivity-timer 3600
+service-template DEFAULT_LINKSEC_POLICY_MUST_SECURE
+ linksec policy must-secure
+service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE
+ linksec policy should-secure
+service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+ voice vlan
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+vlan internal allocation policy ascending
+!
+!
+!
+policy-map type control subscriber dot1sub
+ event session-started match-all
+  10 class always do-until-failure
+   10 authenticate using dot1x priority 10
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ switchport trunk allowed vlan 40,50,60,999
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ip arp inspection trust
+ media-type rj45
+ negotiation auto
+ ip dhcp snooping trust
+!
+interface GigabitEthernet0/1
+ switchport trunk allowed vlan 40,50,60,999
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ip arp inspection trust
+ media-type rj45
+ negotiation auto
+ ip dhcp snooping trust
+!
+interface GigabitEthernet0/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ switchport access vlan 40
+ switchport mode access
+ ip device tracking maximum 1
+ media-type rj45
+ negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ service-policy type control subscriber dot1sub
+ ip verify source port-security
+ ip dhcp snooping limit rate 3
+!
+interface GigabitEthernet1/1
+ switchport access vlan 50
+ switchport mode access
+ ip device tracking maximum 1
+ media-type rj45
+ negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ service-policy type control subscriber dot1sub
+ ip verify source port-security
+ ip dhcp snooping limit rate 3
+!
+interface GigabitEthernet1/2
+ switchport access vlan 60
+ switchport mode access
+ ip device tracking maximum 1
+ media-type rj45
+ negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ service-policy type control subscriber dot1sub
+ ip verify source port-security
+ ip dhcp snooping limit rate 3
+!
+interface GigabitEthernet1/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface Vlan40
+ ip address 192.168.1.51 255.255.255.240
+ ip helper-address 192.168.254.3
+ ip helper-address 192.168.254.4
+ no ip route-cache
+!
+interface Vlan50
+ ip address 192.168.1.67 255.255.255.240
+ ip helper-address 192.168.254.3
+ ip helper-address 192.168.254.4
+ no ip route-cache
+!
+interface Vlan60
+ ip address 192.168.1.83 255.255.255.240
+ ip helper-address 192.168.254.3
+ ip helper-address 192.168.254.4
+ no ip route-cache
+!
+interface Vlan999
+ ip address 192.168.1.251 255.255.255.248
+ no ip route-cache
+!
+ip default-gateway 192.168.1.254
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+ip radius source-interface Vlan999
+!
+!
+!
+!
+radius server radiusdot1xDC0
+ address ipv4 192.168.253.2 auth-port 1645 acct-port 1646
+ key 7 1533080F01393870
+!
+radius server radiusdot1xDC1
+ address ipv4 192.168.253.3 auth-port 1645 acct-port 1646
+ key 7 08004F4D0C0A1643
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ password 7 00071A150754
+line aux 0
+line vty 0 4
+ password 7 05080F1C2243
+line vty 5 15
+ password 7 01100F175804
+!
+!
+end

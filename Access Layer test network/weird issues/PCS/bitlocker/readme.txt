@@ -1,1 +1,0 @@
-Next commit this will contain how i set it up

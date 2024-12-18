@@ -1,0 +1,275 @@
+Building configuration...
+
+Current configuration : 6247 bytes
+!
+! Last configuration change at 17:52:20 UTC Sun Mar 10 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname Access2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$TKz/$LZwbrgGDH7D0HVovcrcp00
+!
+aaa new-model
+!
+!
+aaa group server radius dot1xauth
+ server name radiusdot1xDC0
+ server name radiusdot1xDC1
+!
+aaa authentication dot1x default group dot1xauth
+aaa authorization network default group dot1xauth
+!
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+dot1x system-auth-control
+service-template webauth-global-inactive
+ inactivity-timer 3600
+service-template DEFAULT_LINKSEC_POLICY_MUST_SECURE
+ linksec policy must-secure
+service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE
+ linksec policy should-secure
+service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+ voice vlan
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+vlan internal allocation policy ascending
+!
+!
+!
+policy-map type control subscriber dot1sub
+ event session-started match-all
+  10 class always do-until-failure
+   10 authenticate using dot1x priority 10
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.254.12 255.255.255.255
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.255.50 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 192.168.255.42 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ switchport access vlan 10
+ switchport mode access
+ media-type rj45
+ negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ spanning-tree portfast edge
+ service-policy type control subscriber dot1sub
+!
+interface GigabitEthernet0/3
+ switchport access vlan 20
+ switchport mode access
+ shutdown
+ media-type rj45
+ negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ spanning-tree portfast edge
+ service-policy type control subscriber dot1sub
+!
+interface GigabitEthernet1/0
+ switchport access vlan 30
+ switchport mode access
+ shutdown
+ media-type rj45
+ negotiation auto
+ access-session host-mode single-host
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ spanning-tree portfast edge
+ service-policy type control subscriber dot1sub
+!
+interface GigabitEthernet1/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface Vlan10
+ ip address 192.168.0.1 255.255.255.252
+!
+interface Vlan20
+ ip address 192.168.0.5 255.255.255.252
+!
+interface Vlan30
+ ip address 192.168.0.9 255.255.255.252
+!
+router ospf 1
+ area 1 range 192.168.0.0 255.255.255.224
+ passive-interface Loopback1
+ passive-interface Vlan10
+ passive-interface Vlan20
+ passive-interface Vlan30
+ network 192.168.0.1 0.0.0.0 area 1
+ network 192.168.0.5 0.0.0.0 area 1
+ network 192.168.0.9 0.0.0.0
+*Mar 10 22:34:22.470: %DOT1X-5-FAIL: Authentication failed for client (0c70.6740.0000) on Interface Gi0/2 AuditSessionID C0A8FF320000000B001168EAarea 1
+ network 192.168.254.12 0.0.0.0 area 0
+ network 192.168.255.42 0.0.0.0 area 0
+ network 192.168.255.50 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+ip radius source-interface Loopback1
+!
+!
+!
+!
+radius server radiusdot1xDC0
+ address ipv4 192.168.253.2 auth-port 1645 acct-port 1646
+ key 7 013205075E18155D
+!
+radius server radiusdot1xDC1
+ address ipv4 192.168.253.3 auth-port 1645 acct-port 1646
+ key 7 096D4D0A1C160440
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ password 7 094F471A1A0A
+line aux 0
+line vty 0 4
+ password 7 060506324F41
+line vty 5 15
+ password 7 13061E010803
+!
+!
+end

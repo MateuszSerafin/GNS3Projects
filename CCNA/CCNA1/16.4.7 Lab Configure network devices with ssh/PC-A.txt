@@ -1,0 +1,10 @@
+vpc didnt had ssh so i just used l3 switch for my client. lol
+
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.1.3 255.255.255.0
+ no ip route-cache
+ negotiation auto
+!
+
+ip default-gateway 192.168.1.1

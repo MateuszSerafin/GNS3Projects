@@ -1,0 +1,211 @@
+Building configuration...
+
+Current configuration : 4652 bytes
+!
+! Last configuration change at 17:31:38 UTC Sun Mar 10 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname Access1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$y5Wa$jWpNvDtaJ3c2LeGLJ7zp60
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.254.11 255.255.255.255
+!
+interface Port-channel1
+ no switchport
+ ip address 192.168.253.1 255.255.255.252
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.255.38 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 192.168.255.46 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/3
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/0
+ no switchport
+ ip address 192.168.253.5 255.255.255.252
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ no switchport
+ ip address 192.168.253.9 255.255.255.252
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+router ospf 1
+ area 1 range 192.168.253.0 255.255.255.224
+ passive-interface GigabitEthernet1/0
+ passive-interface GigabitEthernet1/1
+ passive-interface Loopback1
+ passive-interface Port-channel1
+ network 192.168.253.1 0.0.0.0 area 1
+ network 192.168.253.5 0.0.0.0 area 1
+ network 192.168.253.9 0.0.0.0 area 1
+ network 192.168.254.11 0.0.0.0 area 0
+ network 192.168.255.38 0.0.0.0 area 0
+ network 192.168.255.46 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ password 7 110A1016141D
+ login
+line aux 0
+line vty 0 4
+ password 7 01100F175804
+ login
+line vty 5 15
+ password 7 01100F175804
+ login
+!
+!
+end

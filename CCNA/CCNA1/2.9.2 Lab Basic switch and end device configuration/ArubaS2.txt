@@ -1,0 +1,40 @@
+Current configuration:
+!
+!Version ArubaOS-CX Virtual.10.07.0010
+!export-password: default
+hostname S2
+banner motd !
+Access prohibited
+!
+user admin group administrators password ciphertext AQBapYgA+KhRoHjl5UfMESzefOc2
+user test group administrators password ciphertext AQBapXt/Xi9FNbFWIytP9kDBADDdD
+led locator on
+ntp server pool.ntp.org minpoll 4 maxpoll 4 iburst
+ntp enable
+!
+!
+!
+!
+!
+!
+ssh server vrf mgmt
+vlan 1
+interface mgmt
+    no shutdown
+    ip dhcp
+interface 1/1/1
+    no shutdown
+    no routing
+    vlan access 1
+interface 1/1/2
+    no shutdown
+    no routing
+    vlan access 1
+interface vlan 1
+    ip address 192.168.1.2/24
+!
+!
+!
+!
+!
+https-server vrf mgmt

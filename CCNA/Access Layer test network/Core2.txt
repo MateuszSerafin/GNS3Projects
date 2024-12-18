@@ -1,0 +1,302 @@
+Building configuration...
+
+Current configuration : 7575 bytes
+!
+! Last configuration change at 18:42:57 UTC Sun Mar 10 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname Core2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$70Ec$DRBjv7kGshUi8cQxQY18z/
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+ip dhcp excluded-address 192.168.1.1
+ip dhcp excluded-address 192.168.1.2
+ip dhcp excluded-address 192.168.1.14
+ip dhcp excluded-address 192.168.1.17
+ip dhcp excluded-address 192.168.1.18
+ip dhcp excluded-address 192.168.1.30
+ip dhcp excluded-address 192.168.1.33
+ip dhcp excluded-address 192.168.1.34
+ip dhcp excluded-address 192.168.1.46
+ip dhcp excluded-address 192.168.1.49
+ip dhcp excluded-address 192.168.1.50
+ip dhcp excluded-address 192.168.1.62
+ip dhcp excluded-address 192.168.1.65
+ip dhcp excluded-address 192.168.1.66
+ip dhcp excluded-address 192.168.1.78
+ip dhcp excluded-address 192.168.1.81
+ip dhcp excluded-address 192.168.1.82
+ip dhcp excluded-address 192.168.1.94
+ip dhcp excluded-address 192.168.2.1
+ip dhcp excluded-address 192.168.2.2
+ip dhcp excluded-address 192.168.2.126
+ip dhcp excluded-address 192.168.2.129
+ip dhcp excluded-address 192.168.2.130
+ip dhcp excluded-address 192.168.2.190
+ip dhcp excluded-address 192.168.2.193
+ip dhcp excluded-address 192.168.2.194
+ip dhcp excluded-address 192.168.2.222
+ip dhcp excluded-address 192.168.1.3
+ip dhcp excluded-address 192.168.1.19
+ip dhcp excluded-address 192.168.1.35
+ip dhcp excluded-address 192.168.1.51
+ip dhcp excluded-address 192.168.1.67
+ip dhcp excluded-address 192.168.1.83
+ip dhcp excluded-address 192.168.2.3
+ip dhcp excluded-address 192.168.2.131
+ip dhcp excluded-address 192.168.2.132
+ip dhcp excluded-address 192.168.2.195
+!
+ip dhcp pool vlan10
+ network 192.168.1.0 255.255.255.240
+ domain-name companyA.local
+ dns-server 192.168.253.2
+ default-router 192.168.1.14
+!
+ip dhcp pool vlan20
+ network 192.168.1.16 255.255.255.240
+ domain-name companyA.local
+ default-router 192.168.1.30
+ dns-server 192.168.253.2
+!
+ip dhcp pool vlan30
+ network 192.168.1.32 255.255.255.240
+ domain-name companyA.local
+ default-router 192.168.1.46
+ dns-server 192.168.253.2
+!
+ip dhcp pool vlan40
+ network 192.168.1.48 255.255.255.240
+ domain-name companyA.local
+ dns-server 192.168.253.2
+ default-router 192.168.1.62
+!
+ip dhcp pool vlan50
+ network 192.168.1.64 255.255.255.240
+ domain-name companyA.local
+ default-router 192.168.1.78
+ dns-server 192.168.253.2
+!
+ip dhcp pool vlan60
+ network 192.168.1.80 255.255.255.240
+ domain-name companyA.local
+ default-router 192.168.1.94
+ dns-server 192.168.253.2
+!
+ip dhcp pool Switchblock3vlan10
+ network 192.168.2.0 255.255.255.128
+ domain-name companyA.local
+ dns-server 192.168.253.2
+ default-router 192.168.2.126
+!
+ip dhcp pool Switchblock3vlan20
+ network 192.168.2.128 255.255.255.192
+ domain-name companyA.local
+ dns-server 192.168.253.2
+ default-router 192.168.2.190
+!
+ip dhcp pool Switchblock3vlan30
+ network 192.168.2.192 255.255.255.240
+ domain-name companyA.local
+ dns-server 192.168.253.2
+ default-router 192.168.2.222
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.254.4 255.255.255.255
+!
+interface Port-channel1
+ no switchport
+ ip address 192.168.255.18 255.255.255.252
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.255.14 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 192.168.255.6 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 1 mode on
+!
+interface GigabitEthernet0/3
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 1 mode on
+!
+interface GigabitEthernet1/0
+ no switchport
+ ip address 192.168.255.29 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ no switchport
+ ip address 192.168.255.33 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ no switchport
+ ip address 192.168.255.65 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ no switchport
+ ip address 192.168.255.61 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ no switchport
+ ip address 192.168.255.77 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ no switchport
+ ip address 192.168.255.85 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ shutdown
+ media-type rj45
+ negotiation auto
+!
+router ospf 1
+ passive-interface Loopback1
+ network 192.168.254.4 0.0.0.0 area 0
+ network 192.168.255.6 0.0.0.0 area 0
+ network 192.168.255.14 0.0.0.0 area 0
+ network 192.168.255.18 0.0.0.0 area 0
+ network 192.168.255.29 0.0.0.0 area 0
+ network 192.168.255.33 0.0.0.0 area 0
+ network 192.168.255.61 0.0.0.0 area 0
+ network 192.168.255.65 0.0.0.0 area 0
+ network 192.168.255.77 0.0.0.0 area 0
+ network 192.168.255.85 0.0.0.0 area 0
+ default-information originate
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 192.168.254.2
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ password 7 045802150C2E
+ login
+line aux 0
+line vty 0 4
+ password 7 104D000A0618
+ login
+line vty 5 15
+ password 7 104D000A0618
+ login
+!
+!
+end

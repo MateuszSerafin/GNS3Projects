@@ -1,0 +1,2 @@
+The tldr is that without dns the network interface will not be marked as a domain, it will be marked as a public interface and block some services.
+I did not want to resolve it by just shutting down firewall. In my network if linux dns is up always both of the domain controllers. But the linux srve

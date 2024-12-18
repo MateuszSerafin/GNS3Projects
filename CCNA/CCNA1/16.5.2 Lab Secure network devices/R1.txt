@@ -1,0 +1,131 @@
+Building configuration...
+
+*Feb 26 20:57:21.443: %SYS-5-CONFIG_I: Configured from console by console
+Current configuration : 1724 bytes
+!
+! Last configuration change at 20:57:21 UTC Mon Feb 26 2024
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+enable secret 5 $1$l17N$DsrALF1oahVpUWN4f6D4v1
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ccna-lab.com
+ip cef
+login block-for 120 attempts 3 within 60
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username SSHadmin secret 5 $1$Cf1i$u6iKYtOTqiW557pogkEBH/
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ ip address 192.168.1.1 255.255.255.0
+ negotiation auto
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ exec-timeout 360 0
+ privilege level 15
+ password 7 145311021F07256A650B1C1B68
+ logging synchronous
+ login
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ exec-timeout 360 0
+ password 7 0040100F175804474E17787743
+ login local
+ transport input ssh
+line vty 5 15
+ exec-timeout 360 0
+ password 7 0040100F175804474E17787743
+ login local
+ transport input ssh
+!
+!
+end

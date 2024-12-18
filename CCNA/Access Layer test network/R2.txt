@@ -1,0 +1,146 @@
+Building configuration...
+
+Current configuration : 2098 bytes
+!
+! Last configuration change at 18:06:55 UTC Sun Mar 10 2024
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+enable secret 5 $1$LG5h$97PvlsUz0enkCIrc/SzvG1
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.254.2 255.255.255.255
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ ip address dhcp
+ ip nat outside
+ ip virtual-reassembly in
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ ip address 192.168.255.13 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ ip address 192.168.255.9 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ negotiation auto
+!
+router ospf 1
+ passive-interface Loopback1
+ network 192.168.254.2 0.0.0.0 area 0
+ network 192.168.255.9 0.0.0.0 area 0
+ network 192.168.255.13 0.0.0.0 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside source list 100 interface GigabitEthernet0/0 overload
+!
+no cdp log mismatch duplex
+!
+!
+access-list 100 permit ip 192.168.0.0 0.0.255.255 any
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+banner motd ^CAccess prohibited^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ password 7 14141B180F0B
+ logging synchronous
+ login
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ password 7 02050D480809
+ login
+ transport input all
+line vty 5 15
+ password 7 02050D480809
+ login
+ transport input all
+!
+!
+end
