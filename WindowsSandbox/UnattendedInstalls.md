@@ -91,12 +91,14 @@ Yea not a lot of success.
 >dism /mount-image /imagefile:c:\boot.wim /mountdir:c:\mounted
 <br>
 3. Edit with notepad ``c:\mounted\Windows\system32\startnet.cmd``
-<br>We just need mount our share and execute 
-![](resources/startnet.cmd.png)
+<br>We just need mount our share and execute<br>
+![alt text](resources/startnet.cmd.png)
 4. Unmount the image and save changes
 > dism /unmount-image /mountdir:c\mounted /commit
 5. Should boot into WinPE and then automatically install windows.
+<br>
 ![](resources/pesetupexe.gif)
+![test](https://github.com/MateuszSerafin/GNS3_Networks/blob/main/WindowsSandbox/resources/pesetupexe.gif?raw=true)
 
 ### Using WinPE + DISM
 TODO
