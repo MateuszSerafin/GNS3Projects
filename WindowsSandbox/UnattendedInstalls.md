@@ -72,4 +72,31 @@ Now this is where i encountered some issues.
 ![](resources/othertftpserver.png)
 I decided to ditch it.
 There are two probable solutions 1. There is weird option in XYZ tftp server to resolve paths correctly 2. It's something to do with WinPE itself like in a setup step or something like that (unlikely). But testing multiple tftp servers just for that when i will ditch this PXE setup after sucessful install seems not worth it.
+<br><br> I also tried to use tftpd64 on windows just for tftp, on the microsoft website it clearly mentions that option 66 allows to select server ip that will be used for tftp. So I tried it
+![](resources/literaryshouldwork.png)
+This is the following result
+![](resources/pointingtodifferenttftp.gif)
+Yea not a lot of success.
+3. Yea so fully using tftpd64 just works 
+<br>This is my config<br>
+![](resources/tftpsettings.png)
+![](resources/dhcpsettings.png)
+>The important note here is that bootmgfw.efi was not copied by microsoft commands you had to find it. And it boots into uefi, if you want bios you need to have bootmgr.exe or bootsomething.com (there is only one .com file there). I don't remember. As I mentioned above I only care about uefi it works it works.
 
+![](resources/firstWinPEboot.gif)
+
+### Using Setup.exe 
+1. Prepare share with extracted iso from Windows 10/11 and autounattend.xml
+2. Mount boot.wim <br>
+>dism /mount-image /imagefile:c:\boot.wim /mountdir:c:\mounted
+<br>
+3. Edit with notepad ``c:\mounted\Windows\system32\startnet.cmd``
+<br>We just need mount our share and execute 
+![](resources/startnet.cmd.png)
+4. Unmount the image and save changes
+> dism /unmount-image /mountdir:c\mounted /commit
+5. Should boot into WinPE and then automatically install windows.
+![](resources/pesetupexe.gif)
+
+### Using WinPE + DISM
+TODO
