@@ -1,10 +1,17 @@
-# Tldr
-I want to play around with windows automatic installs and want to see what i can do. From what i understand there are 3 options
-1. .iso with autounattend.xml
-2. Pxe boot with WinPE (still using autounattend.xml)
-3. Windows Deployment Services (Didn't use it before)
+# Unattended Installs
+There is highly likelihood of me missing something
+1. .iso with autounattend.xml ✅
+2. PXE with WinPE
+   - WinPE Setup.exe ✅
+   - WinPE Dism ✅
+3. Windows Deployment Services
+    - WDS ✅
+    - MDT ❌ (Need to still try it)
 
-The disclaimer is i only intend it to work on UEFI
+Additionally
+1. Capture and Apply custom windows Image ❌ (Need to still do it)
+
+The disclaimer is I only try things on UEFI.
 
 ## Creation of basic unattended xml
 I followed this [tutorial](https://www.windowscentral.com/how-create-unattended-media-do-automated-installation-windows-10)
@@ -13,7 +20,7 @@ I followed this [tutorial](https://www.windowscentral.com/how-create-unattended-
 2. Using Windows System Image Manager import your target image i have used Education Version
 3. Add Components, from what i have seen the component names changed slightly since the tutorial have released but i was still able to find them for my version <br> Pass 1 Windows PE - International-Core-WinPE_neutral, Windows-Setup_neutral <br> Pass 7 oobeSystem - International-Core_neutral, Shell-Setup_neutral <br> I really suggest to use ctrl+f there.
 4. Configure the components, there is lots of additional stuff that don't need to be configured, the tutorial i linked provides the bare minimum that will work. It makes a lot of sense when you configure it but there are weird quirks such as configuring the partitions.
-<br>After it should look like that![alt text](resources/FirstVersionXML.png)
+<br>After it should look like that![alt text](UnattendedInstalls/FirstVersionXML.png)
 
 5. Save it.
 
@@ -24,7 +31,7 @@ Maybe what i did was not the simplest or best option
 3. I used oscdimg to create bootable iso from folder, the command i provide allows only for boot on UEFI
     >oscdimg.exe -m -o -u2 -udfver102 -bootdata:2#p0,e,b(iso folder)\boot\etfsboot.com#pEF,e,b(iso folder)\efi\microsoft\boot\efisys.bin (destination).iso
 4. It works
-![](resources/FirstVersionInstalling.gif)
+![](UnattendedInstalls/FirstVersionInstalling.gif)
 
 ## PXE with WinPE
 From what i understand there are two options there. Use setup.exe or DISM
@@ -67,23 +74,23 @@ Also at the end of this step i used the following command, because in the comman
 Now this is where i encountered some issues.
 1. I thought about using WDS's tftp for it, but it looks like it was not intended to be used this way. I might be incorrect with this one but i looked at it and just didn't feel correct.
 2. I tried to setup ArchLinux with dnsmasq, I had success previously with pxe booting Arch through it, so I tried WinPE. Upon correctly configuring the PXE it was booting partially.  
-![](resources/correctdnsmasq.gif)
+![](UnattendedInstalls/correctdnsmasq.gif)
 <br><br> No matter what I did to it, it just didn't want to play. But the fact that it was doing something got me curios. Upon further investigation i saw that the paths were mixed with Windows forward slashes and unix's backslashes. 
-![](resources/othertftpserver.png)
+![](UnattendedInstalls/othertftpserver.png)
 I decided to ditch it.
 There are two probable solutions 1. There is weird option in XYZ tftp server to resolve paths correctly 2. It's something to do with WinPE itself like in a setup step or something like that (unlikely). But testing multiple tftp servers just for that when i will ditch this PXE setup after sucessful install seems not worth it.
 <br><br> I also tried to use tftpd64 on windows just for tftp, on the microsoft website it clearly mentions that option 66 allows to select server ip that will be used for tftp. So I tried it
-![](resources/literaryshouldwork.png)
+![](UnattendedInstalls/literaryshouldwork.png)
 This is the following result
-![](resources/pointingtodifferenttftp.gif)
+![](UnattendedInstalls/pointingtodifferenttftp.gif)
 Yea not a lot of success.
 3. Yea so fully using tftpd64 just works 
 <br>This is my config<br>
-![](resources/tftpsettings.png)
-![](resources/dhcpsettings.png)
+![](UnattendedInstalls/tftpsettings.png)
+![](UnattendedInstalls/dhcpsettings.png)
 >The important note here is that bootmgfw.efi was not copied by microsoft commands you had to find it. And it boots into uefi, if you want bios you need to have bootmgr.exe or bootsomething.com (there is only one .com file there). I don't remember. As I mentioned above I only care about uefi it works it works.
 
-![](resources/firstWinPEboot.gif)
+![](UnattendedInstalls/firstWinPEboot.gif)
 
 ### Using Setup.exe 
 1. Prepare share with extracted iso from Windows 10/11 and autounattend.xml
@@ -92,22 +99,36 @@ Yea not a lot of success.
     <br>
 3. Edit with notepad ``c:\mounted\Windows\system32\startnet.cmd``
 <br>We just need mount our share and execute<br>
-![alt text](resources/startnet.cmd.png)
+![alt text](UnattendedInstalls/startnet.cmd.png)
 4. Unmount the image and save changes
     > dism /unmount-image /mountdir:c\mounted /commit
 5. Should boot into WinPE and then automatically install windows.
 
-![](resources/pesetupexe.gif)
+![](UnattendedInstalls/pesetupexe.gif)
 ### Using WinPE + DISM
-TODO
+The steps are similar to using setup.exe, The main difference being that we just do everything the manually, i guess this makes sense as we have more flexibility
+The process looks something like that
+1. Create partitions
+2. Apply image 
+3. Use bcdboot to create a bootloader 
+4. Copy autounattend.xml so it actually is a 0 touch deployment
+
+Here is what i did
+![](UnattendedInstalls/dismstartnet.cmd.png)
+1. Partitions.txt is from https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oem-deployment-of-windows-desktop-editions-sample-scripts?view=windows-11&preserve-view=true
+2. Applying the image is from https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-using-a-single-wim?view=windows-11
+3. For some reason copying unattended.xml to directories from https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11#implicit-answer-file-search-order doesn't work. The only one that worked was C:\Unattend.xml (it says that Autounattend.xml should work but it didn't)
+
+![](UnattendedInstalls/applyimage.gif)
+
 
 ## Using WDS
 1. Install dhcp and windows deployment services role and configure them (for WDS I installed it as standalone server and just clicked next for everything, my lab is not part of domain) 
-![](resources/installingWDS.gif)
-2. Create a DHCP scope
-![](resources/dhcpscopewds.png)
+![](UnattendedInstalls/installingWDS.gif)
+2. Create a DHCP scope <br>
+![](UnattendedInstalls/dhcpscopewds.png)
 3. Extract .iso, using Windows Deployment Services add boot image (which would be inside sources\boot.wim), then add install image (sources\install.wim).
-![](resources/addingImages.gif)
+![](UnattendedInstalls/addingImages.gif)
    (At this point you can PXE boot but you would need to click things manually, but it would allow to install windows 10 or whatever you got fully through network which is suprisingly easy)
 4. Configure a separate xml with pass 1. I reused my old autounattend.xml and the only difference is that i added the "WindowsDeploymentServices" compontent and i removed InstallFrom/To from Windows-Setup_Neutral with whole pass 7 OOBE.
 Also the "WindowsDeploymentServices" component needs to be configured but it was supriginsly easy.
@@ -125,11 +146,11 @@ Also the "WindowsDeploymentServices" component needs to be configured but it was
     Under "Login":
     - Yea, just provide domain, password login, all it does is on pxe boot it asks for password but when we provide password there it stops asking for the password. 
     
-    ![](resources/WDSpass1XML.png)
+    ![](UnattendedInstalls/WDSpass1XML.png)
     After it's configured save it and tick "Enable unattended installation" and put your file into the correct architecture (for me, it was x64 UEFI)
-    ![](resources/wdsPropertiesClientTab.png)
+    ![](UnattendedInstalls/wdsPropertiesClientTab.png)
 5. Under Install Images in Windows Deployment Services go to the properties tab, Tick "Allow image to install in unattended mode" and select your xml. I used my old autounattend.xml It's important to mention the pass 1 from this xml won't be applied. As pass 1 is handled differently (by a step above)
-![](resources/imageProperties.png)
+![](UnattendedInstalls/imageProperties.png)
 
 6. Working
-![](resources/wdsAutoInstall.gif)
+![](UnattendedInstalls/wdsAutoInstall.gif)
