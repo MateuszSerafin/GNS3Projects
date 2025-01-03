@@ -9,7 +9,9 @@ There is highly likelihood of me missing something
     - MDT ❌ (Need to still try it)
 
 Additionally
-1. Capture and Apply custom windows Image ❌ (Need to still do it)
+1. Capture and Apply custom windows Image
+   - WDS ✅
+   - Manually ✅
 
 The disclaimer is I only try things on UEFI.
 
@@ -154,3 +156,32 @@ Also the "WindowsDeploymentServices" component needs to be configured but it was
 
 6. Working
 ![](UnattendedInstalls/wdsAutoInstall.gif)
+
+## Capturing Images
+### Preparation of image
+1. Clean installation of Windows 10
+2. Installed gimp and shotcut
+3. Used sysprep and left it <br>![](UnattendedInstalls/sysprep.png)
+
+### WDS
+For WDS i followed this Guide https://msftwebcast.com/2020/02/sysprep-and-capture-a-windows-10-image-for-wds.html
+1. Create a capture boot (under boot section right click and there will be option to create a capture) <br>![](UnattendedInstalls/wdscaptureboot.png)
+2. Boot it and capture the image I just prepared <br> ![](UnattendedInstalls/capturingWDS.gif)
+3. Add the captured .wim file to the "Installation Images" tab, pretty much the same thing as adding the .wim file from extracted windows .iso
+
+To actually make it fully unattended there are two more things that I had to do 
+1. Tick the box and add my unattended.xml for OOBE <br> ![](UnattendedInstalls/capturedOOBE.png)
+2. Edit pass 1 .xml The only difference is i had to change which image will it pull.
+![](UnattendedInstalls/capturedChanges.png)
+![](UnattendedInstalls/capturedChanges1.png)
+3. And it's working <br>
+    ![](UnattendedInstalls/capturedWDSInstall.gif)
+
+### DISM
+I used the same prepared image
+1. Boot into WinPE
+2. (I mounted a network drive on G:, windows is mounted under W:) Use `dism /Capture-Image /ImageFile:G:\Custom.wim /captureDir:W:\ /Name:CustomImage`
+3. The image is captured and is ready to use <br> ![](UnattendedInstalls/dismCaptured.png)
+
+To apply it in unattended fashion via WinPE as i did before the only difference to my original startnet.cmd is i changed filename and /Index to 1. It just works
+![](UnattendedInstalls/customViaDism.gif)
