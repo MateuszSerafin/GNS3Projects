@@ -1,0 +1,318 @@
+Current configuration : 3239 bytes
+!
+version 15.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CustomerAR2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+
+CustomerAR2#
+
+                             GNU GRUB  version 2.00
+
+ +--------------------------------------------------------------------------+
+ |IOSv: flash0:vios-adventerprisek9-m (hd0,msdos1)                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ |                                                                          |
+ +--------------------------------------------------------------------------+
+
+      Use the ^ and v keys to select which entry is highlighted.
+      Press enter to boot the selected OS, `e' to edit the commands
+      before booting or `c' for a command-line. ESC to return
+      previous menu.
+Booted IOSv. Boot args: [/vios-adventerprisek9-m]
+
+Smart Init is enabled
+
+              Restricted Rights Legend
+
+Use, duplication, or disclosure by the Government is
+subject to restrictions as set forth in subparagraph
+(c) of the Commercial Computer Software - Restricted
+Rights clause at FAR sec. 52.227-19 and subparagraph
+(c) (1) (ii) of the Rights in Technical Data and Computer
+Software clause at DFARS sec. 252.227-7013.
+
+           cisco Systems, Inc.
+           170 West Tasman Drive
+           San Jose, California 95134-1706
+
+
+
+Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.9(3)M6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2022 by Cisco Systems, Inc.
+Compiled Mon 08-Aug-22 15:22 by mcpre
+
+
+
+
+This product contains cryptographic features and is subject to United
+States and local country laws governing import, export, transfer and
+use. Delivery of Cisco cryptographic products does not imply
+third-party authority to import, export, distribute or use encryption.
+Importers, exporters, distributors and users are responsible for
+compliance with U.S. and local country laws. By using this product you
+agree to comply with applicable laws and regulations. If you are unable
+to comply with U.S. and local laws, return this product immediately.
+
+A summary of U.S. laws governing Cisco cryptographic products may be found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Cisco IOSv (revision 1.0) with  with 460009K/62464K bytes of memory.Installed image archive
+
+Processor board ID 9USJU6F582HD5H57B2F54
+4 Gigabit Ethernet interfaces
+DRAM configuration is 72 bits wide with parity disabled.
+256K bytes of non-volatile configuration memory.
+2097152K bytes of ATA System CompactFlash 0 (Read/Write)
+0K bytes of ATA CompactFlash 1 (Read/Write)
+1024K bytes of ATA CompactFlash 2 (Read/Write)
+0K bytes of ATA CompactFlash 3 (Read/Write)
+
+
+
+Press RETURN to get started!
+
+
+*Mar  1 00:00:00.297: %ATA-6-DEV_FOUND: device 0x1F0
+*Mar  1 00:00:01.428: %ATA-6-DEV_FOUND: device 0x1F1
+*Mar  1 00:00:03.531: %NVRAM-5-CONFIG_NVRAM_READ_OK: NVRAM configuration 'flash:/nvram' was read from disk.
+*Jan  6 16:56:39.082: %C3600-3-NOMAC: Can't allocate MAC address for interface 0/0
+*Jan  6 16:56:39.093: %C3600-3-NOMAC: Can't allocate MAC address for interface 0/0
+*Jan  6 16:56:39.234: %C3600-3-NOMAC: Can't allocate MAC address for interface 0/0
+*Jan  6 16:56:39.760: %PA-3-PA_INIT_FAILED: Performance Agent failed to initialize (Missing Data License)
+*Jan  6 16:56:40.391: %PNP-6-PNP_DISCOVERY_STARTED: PnP Discovery started
+*Jan  6 16:56:40.688: %SYS-5-CONFIG_I: Configured from memory by console
+*Jan  6 16:56:41.019: %SYS-5-RESTART: System restarted --
+Cisco IOS Software, IOSv Software (VIOS-ADVENTERPRISEK9-M), Version 15.9(3)M6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2022 by Cisco Systems, Inc.
+Compiled Mon 08-Aug-22 15:22 by mcpre
+*Jan  6 16:56:41.019: %CVAC-4-FILE_IGNORED: Configuration file flash0:/ios_config.txt is ignored : empty file
+*Jan  6 16:56:41.023: %CVAC-4-FILE_IGNORED: Configuration file flash2:/ios_config.txt is ignored : empty file
+*Jan  6 16:56:41.035: %CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is OFF
+*Jan  6 16:56:41.035: %CRYPTO-6-GDOI_ON_OFF: GDOI is OFF
+*Jan  6 16:56:41.076: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up
+*Jan  6 16:56:41.076: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+*Jan  6 16:56:41.076: %LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down
+*Jan  6 16:56:41.076: %LINK-5-CHANGED: Interface GigabitEthernet0/3, changed state to administratively down
+*Jan  6 16:56:42.228: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+*Jan  6 16:56:42.228: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+*Jan  6 16:56:42.228: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to down
+*Jan  6 16:56:42.228: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/3, changed state to down
+*Jan  6 16:56:46.648: %PNP-6-PNP_BEST_UDI_UPDATE: Best UDI [PID:IOSv,VID:1.0,SN:9USJU6F582HD5H57B2F54] identified via (entity-mibs)
+*Jan  6 16:56:46.648: %PNP-6-PNP_CDP_UPDATE: Device UDI [PID:IOSv,VID:1.0,SN:9USJU6F582HD5H57B2F54] identified for CDP
+*Jan  6 16:56:46.649: %PNP-6-PNP_DISCOVERY_STOPPED: PnP Discovery stopped (Startup Config Present)
+*Jan  6 16:57:02.267: %PLATFORM-5-SIGNATURE_VERIFIED: Image 'flash0:/vios-adventerprisek9-m' passed code signing verification
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+CustomerAR2#
+CustomerAR2#
+CustomerAR2#
+CustomerAR2#show run
+Building configuration...
+
+Current configuration : 3239 bytes
+!
+version 15.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CustomerAR2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+no cdp log mismatch duplex
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 20.0.1.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 1
+ passive-interface GigabitEthernet0/1
+ network 20.0.1.1 0.0.0.0 area 0
+ network 192.168.1.1 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ login
+ transport input none
+!
+no scheduler allocate
+!
+end
