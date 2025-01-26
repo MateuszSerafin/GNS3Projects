@@ -13,7 +13,14 @@ TODO:
 - Workstations are unlocked only via network unlock ✅
 - Laptops due to fact they are movable and personal should be unlocked via TPM+PIN and Network Unlock for convenience ✅
 - Laptops without TPM must have a randomly generated password ✅
-- Workstations without TPM will be identified and replaced 
+- Workstations without TPM will be identified and replaced ✅ 
+
+## Future Potential Improvements
+Some considerations If I would set it up again
+1. Make a GPO that just runs always and checks if C: is encrypted, currently I do it only once and if scheduled task fails the computer will not become encrypted
+2. If a CD-ROM is plugged into the computer (I think it's also with Pendrives), the encryption will fail, it will just say it can't do it due to CD-ROM/Pendrive, The solution would be to add additional message to user to remove CD and Pendrives before trying encryption (if it would fail either way it would be tried again as 1. point)
+3. Domain computers can create any file in my share, the problem is if someone would do it maliciously, I think there should be a script on DC0 that would create a folder in this share that only particular computer can write this would prevent it, but it's not a huge issue either way.
+
 
 # Lab Setup
 ![](BitLockerScenario/LAB.png) <br>
@@ -42,6 +49,9 @@ It will provide a tab under Computer properties to see the recovery password so 
 <br> ![](BitLockerScenario/AgentGPO.png)
 Additionally this also needs to be configured 
 <br> ![](BitLockerScenario/AgentAddingOtherOption.png)
+8. (After deploying i was able to check and it was working)
+![](BitLockerScenario/AgentWorking.png)
+
 
 
 ## Setting up Network Unlock
@@ -125,15 +135,15 @@ shutdown /r -txx 180
 In summary, if workstation has tpm, encrypt it and remove TPM unlock (so it can be only unlocked via network or with recovery password), which is exactly what i want. And if workstation does not have tpm this will fail which is what I wanted.
 ### To Laptops
 There is one additional GPO that was required to configure to allow tpm+pin and password. 
-![](BitLockerScenario/LaptopsAdditionalGPO.png)
+<br> ![](BitLockerScenario/LaptopsAdditionalGPO.png)
 Aside of that here is my configured task.
-![](BitLockerScenario/LaptopsGeneral.png)
-![](BitLockerScenario/LaptopsTriggers.png)
+<br> ![](BitLockerScenario/LaptopsGeneral.png)
+<br> ![](BitLockerScenario/LaptopsTriggers.png)
 <br>The powershell action is the same as for workstations but it points to Laptops.ps1, also the second action removes the scheduled task, without it, on every single logon bit locker would re-encrypt
-![](BitLockerScenario/LaptopsActions.png)
-![](BitLockerScenario/LaptopsConditions.png)
-![](BitLockerScenario/LaptopSettings.png)
-![](BitLockerScenario/LaptopCommons.png)
+<br> ![](BitLockerScenario/LaptopsActions.png)
+<br> ![](BitLockerScenario/LaptopsConditions.png)
+<br> ![](BitLockerScenario/LaptopSettings.png)
+<br> ![](BitLockerScenario/LaptopCommons.png)
 
 The script used is:
 ```
@@ -178,14 +188,73 @@ shutdown /r /txx 500
 
 ### Testing 
 #### Workstation with TPM
-![](BitLockerScenario/WorkstationTPM.gif)
+<br>![](BitLockerScenario/WorkstationTPM.gif)
 <br><mark>Towards end of gif i checked if network unlock is working by disconnecting from network, and it clearly asked for recovery, when plugging it back, it booted no issues</mark>
 #### Workstation without TPM
-![](BitLockerScenario/WorkstationWithoutTPM.gif)
+<br>![](BitLockerScenario/WorkstationWithoutTPM.gif)
 <br>Nothing happend as expected 
 #### Laptop with TPM
-![](BitLockerScenario/LaptopWithTPM.gif)
+<br>![](BitLockerScenario/LaptopWithTPM.gif)
 <br> I received pin was able to unlock with with the pin, also the network unlock works
 #### Laptop without TPM
- ![](BitLockerScenario/LaptopWithoutTPM.gif)
+ <br>![](BitLockerScenario/LaptopWithoutTPM.gif)
  <br> I receive password, network unlock doesn't work because it requires tpm, which was expected
+
+## Checking if BitLocker applied
+1.  Create a network Share that is only writable by domain computers
+<br> ![](BitLockerScenario/WriteOnlyShare.png)
+2. Edit the permissions on the NTFS filesystem so that domain computers and only write rather than read/write
+<br> ![](BitLockerScenario/WriteOnlySharePerms.png)
+3. Create a reoccurring task, i used this script, it's pretty much another GPO. The idea is it runs at least every hour so Administrator can check how many machines are encrypted.
+   ```
+   $out = ""
+   
+   $hasTpm = "NONE"
+   try {
+       if($(Get-TPM).TpmPresent){
+           $hasTpm = "Has TPM"
+       } else {
+           $hasTpm = "No TPM"
+       }
+   
+   } catch {
+       $hasTpm = "No TPM"
+   }
+   
+   $out = $hasTpm + "`r`n"
+   
+   $blv = Get-BitLockerVolume -MountPoint "C:"
+   
+   $out = $out + "Status: " + $blv.ProtectionStatus + "`r`n"
+   
+   $blv.KeyProtector | ForEach-Object {
+       $out = $out + "ProtectorType:" + $_.KeyProtectorType + "`r`n"
+   }
+   
+   $saveLocation = "\\dc0.testdomain.local\BitLockerWritableOnly\" + $env:COMPUTERNAME + ".txt"
+   
+   $out > $saveLocation
+   
+   exit
+   ```
+4. Now from DC0 i am able to access the folder. With the following script
+```
+$srcDir = "C:\BitLockerWritableOnly\"
+
+$files = Get-ChildItem $srcDir
+
+for($i=0; $i -lt $files.Count; $i++){
+    $content = Get-Content $files[$i].FullName
+
+    if("Status: Off" -in $content){
+        $msg = "Check this PC it seems it's not encrypted: " + $files[$i].FullName
+        echo $msg
+    }
+    if("ProtectorType:RecoveryPassword" -in -not $content){
+        $msg = "Recovery Password Protector missing please check this pc: " + $files[$i].FullName
+        echo $msg
+    }
+    #there should be more checks such as if network unlock is showing, maybe add a check if the encryption is started rather check only if it's encrypted
+}
+```
+This script definitely requires some improvements, but the idea is good i would say.
